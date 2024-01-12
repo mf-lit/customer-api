@@ -10,6 +10,8 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['{{ include "customer-api.fullname" . }}:{{ .Values.service.port }}']
+      # command: ['wget']
+      # args: ['{{ include "customer-api.fullname" . }}:{{ .Values.service.port }}']
+      command: ['/bin/sh', '-c']
+      args: ['wget -qO- {{ include "customer-api.fullname" . }}:{{ .Values.service.port }} | grep {{ required "EnvVar CUSTOMER_RESPONSE must be set" .Values.envVars.CUSTOMER_RESPONSE | quote }}' ]
   restartPolicy: Never

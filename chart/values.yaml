@@ -1,98 +1,98 @@
-# Default values for customer-api.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+# -- Number of replicas (only applicable when autoscaling is not used)
 replicaCount: 1
 
 image:
-  repository: nginx
+  # -- Image Registry
+  repository: customer-api
+  # -- Image Pull Policy
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+# -- Specify a imagePullSecrets array
 imagePullSecrets: []
+# -- Override chart name
 nameOverride: ""
+# -- Override chart fullname
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
+# -- Map of pod annotations
 podAnnotations: {}
+# -- Map of pod labels
 podLabels: {}
 
+# -- Map of pod security context
 podSecurityContext: {}
-  # fsGroup: 2000
 
+# -- Map of security context
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
+  # -- Kubernetes service type
   type: ClusterIP
+  # -- Kubernetes service port
   port: 80
 
+# -- Container port to expose
+port: 8000
+
 ingress:
+  # -- Enable Ingress
   enabled: false
+  # -- Ingress Class Name
   className: ""
+  # -- Ingress Annotations
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+  # -- Ingress TLS Configuration
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
+# -- Resource limits and requests
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 autoscaling:
+  # -- Enable autoscaling for deployment
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  # -- Minimum number of pods to run
+  minReplicas: 2
+  # -- Maximum number of pods to run
+  maxReplicas: 10
+  # -- Target CPU utilization percentage
   targetCPUUtilizationPercentage: 80
+  # -- Target memory utilization percentage
   # targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
+podDisruptionBudget:
+  # -- Enable PodDisruptionBudget
+  enabled: false
+  # -- Minimum available pods
+  minAvailable: 1
+
+# -- Environment variables to set in the main container.
+envVars: {}
+
+# -- Additional volumes on the output Deployment definition.
 volumes: []
 # - name: foo
 #   secret:
 #     secretName: mysecret
 #     optional: false
 
-# Additional volumeMounts on the output Deployment definition.
+# -- Additional volumeMounts on the output Deployment definition.
 volumeMounts: []
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
+## - Node selector for pod assignment
 nodeSelector: {}
 
+## - Tolerations for pod assignment
 tolerations: []
 
+## - Affinity for pod assignment
 affinity: {}

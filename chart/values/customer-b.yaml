@@ -1,0 +1,5 @@
+customerName: "customer-b"
+
+envVars:
+  CUSTOMER_RESPONSE: "Dear Sir or Madam"
+

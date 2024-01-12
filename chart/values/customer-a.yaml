@@ -1,0 +1,5 @@
+customerName: "customer-a"
+
+envVars:
+  CUSTOMER_RESPONSE: "Hi"
+

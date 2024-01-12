@@ -1,0 +1,13 @@
+{{- if and (.Values.podDisruptionBudget.enabled) (or (gt (int .Values.replicaCount) 1) (and .Values.autoscaling.enabled (gt (int .Values.autoscaling.minReplicas) 1))) -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "customer-api.fullname" . }}
+  labels:
+    {{- include "customer-api.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "customer-api.selectorLabels" . | nindent 6 }}
+{{- end}}

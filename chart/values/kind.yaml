@@ -1,0 +1,23 @@
+image:
+  repository: customer-api
+  pullPolicy: IfNotPresent
+  tag: prod # This is OK for local, but not for real production
+
+envVars:
+  CUSTOMER_RESPONSE: "hello local developer"
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    memory: 128Mi
+  requests:
+    cpu: 100m
