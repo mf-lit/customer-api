@@ -9,16 +9,21 @@ The application is packaged as a Docker image, and then deployed to a local Kube
 Once deployed, application endpoints are exposed at:
 `http://<cluster-ip>:<cluster-port>/customer-<a|b>/`
 
+Pseudo-CI/CD is provided by way of a Makefile, whilst not realistic for a production implementation, it gives us a way to demonstrate a pipeline on a local desktop.
+
 ## Prerequisites
 
- - Docker
- - A local Kubernetes cluster with an Ingress-Controller (a [helper script](kind/kind.sh) is included for spinning-up a cluster (called `test-cluster`) using Kind)
- - Kubectl
+The following must be installed on the local machine:
+
+ - Docker 
  - Helm
+ - Kind
+   - A [helper script](kind/kind.sh) is included for spinning-up a cluster (called `test-cluster`) using Kind along with an Nginx Ingress Controller
+   - Note: The helper script requires `kubectl`
 
 ## Quick-start
 
- If pre-requisites are met it should be possible to run the full CI/CD pipeline and start two instances of the application using `make cicd`
+If pre-requisites are met it should be possible to run the full CI/CD pipeline and start two instances of the application using `make cicd`
 
 ## Usage
 
