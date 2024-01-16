@@ -1,4 +1,6 @@
-.PHONY: test deps reqs lint docker-build
+# TODO: Add status messaging to each step
+
+.PHONY: test deps reqs lint docker-build docker-push deploy
 
 deps: reqs ## Installs Python dependencies needed to run the project
 	pip install --upgrade pip pip-tools
@@ -12,9 +14,11 @@ test: ## Runs the tests
 	docker build -t customer-api:test --target test .
 	docker run --rm customer-api:test pytest -v /app
 
-lint: ## Basic linting of python and dockerfile
+lint: ## Basic linting/formatting of python, dockerfile and helm chart
+	docker run -i --rm -v $(PWD):/io ghcr.io/astral-sh/ruff:0.1.13 .
 	docker run --rm -v $(PWD)/src:/src --workdir /src pyfound/black:23.3.0 black --check --diff .
 	docker run --rm -i hadolint/hadolint < Dockerfile
+	docker run -i --rm -v $(PWD):/apps -w /apps alpine/helm template customer-api chart --values chart/values/kind.yaml 1>/dev/null
 
 docker-build: # Build "production" image
 	docker build -t customer-api:prod --target prod .
